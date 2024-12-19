@@ -20,6 +20,7 @@
    use shr_sys_mod
    use glc_communicate, only: my_task, master_task
    use glc_constants, only: verbose, stdout, glc_smb, test_coupling, num_icesheets
+   use glc_constants, only: glc_standalone_test
    use glc_exit_mod, only : exit_glc, sigAbort
    
    implicit none
@@ -126,9 +127,10 @@
 !                        qsmb = precipitation (kg/m^2/s)
 !-----------------------------------------------------------------------
 
-     if (glc_smb) then
+     if (glc_smb .and. not(glc_standalone_test)) then
 
-         if (verbose .and. my_task==master_task) then 
+        !if (verbose .and. my_task==master_task) then
+        if (my_task==master_task) then 
             write(stdout,*) ' '
             write(stdout,*) 'Call glad, thour =', thour
             write(stdout,*) ' '
@@ -166,6 +168,14 @@
             end associate
          end do
 
+      elseif (glc_smb .and. glc_standalone_test) then
+
+         if (my_task==master_task) then 
+            write(stdout,*) ' '
+            write(stdout,*) 'Call stand-alone cism, thour =', thour
+            write(stdout,*) ' '
+         endif
+         
       else    ! use PDD scheme
 
          !TODO - Implement and test PDD option

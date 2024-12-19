@@ -62,6 +62,9 @@
                           ! (in multiple elevation classes)
                           ! if false, use PDD scheme in CISM
                           ! set in glc_cpl_indices_set
+  logical ::   &
+       glc_standalone_test = .true.  ! if true, call CISM through stand-alone mode, and ignore all
+                                     ! data from the coupler (used to reproduce stand-alone testing)
 
    !-----------------------------------------------------------------
    ! other info controlling this run
